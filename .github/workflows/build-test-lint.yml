@@ -16,9 +16,9 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout
+      uses: actions/checkout@v3
     - name: Setup Node.js
-      uses: actions/setup-node
+      uses: actions/setup-node @v3
       with:
         node-version: '18.x'
     - name: Install Dependencies
@@ -31,9 +31,9 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout
+      uses: actions/checkout@v3
     - name: Setup Node.js
-      uses: actions/setup-node
+      uses: actions/setup-node@v3
       with:
         node-version: '18.x'
     - name: Install Dependencies
