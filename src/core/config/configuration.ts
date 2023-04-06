@@ -10,4 +10,5 @@ export default {
     password: process.env.DB_PASSWORD,
     schema: process.env.DB_NAME,
   },
+  openAIKey: process.env.OPENAI_API_KEY as string,
 };
