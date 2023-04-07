@@ -13,6 +13,8 @@ const validationSchema = Joi.object({
   DATABASE_URL: Joi.string().required(),
 
   OPENAI_API_KEY: Joi.string().required(),
+  JWT_SECRET_KEY: Joi.string().required(),
+  JWT_EXPIRES_IN_DAYS: Joi.number().required(),
 }).unknown();
 
 export const validateSchema = () => {

@@ -2,6 +2,7 @@ import { DataSource, Repository } from "typeorm";
 import { CreateUserDto } from "../auth/dto/register-user.dto";
 import { UsersEntity } from "./entities/users.entity";
 import * as bcrypt from "bcrypt";
+import { LoginUserDto } from "../auth/dto/login-user.dto";
 
 export class UserRepository {
   private readonly userRepository: Repository<UsersEntity>;
@@ -18,6 +19,22 @@ export class UserRepository {
    */
   private async hashPassword(password: string, salt: string) {
     return bcrypt.hash(password, salt);
+  }
+
+  /**
+   * validate password
+   * @param password
+   * @param salt
+   * @param hashPassword
+   * @returns
+   */
+  private async validatePassword(
+    password: string,
+    salt,
+    hashPassword: string
+  ): Promise<boolean> {
+    const hash = await bcrypt.hash(password, salt);
+    return hash === hashPassword;
   }
 
   /**
@@ -49,5 +66,25 @@ export class UserRepository {
     delete savedUser.password;
 
     return savedUser;
+  }
+
+  /**
+   * validate user password
+   * @param loginDTO
+   * @returns
+   */
+  async validateUserPassword(loginDTO: LoginUserDto): Promise<UsersEntity> {
+    const { email, password } = loginDTO;
+    const user = await this.userRepository.findOne({ where: { email: email } });
+    if (
+      user &&
+      user.salt &&
+      user.password &&
+      (await this.validatePassword(password, user.salt, user.password))
+    ) {
+      return user;
+    } else {
+      return null;
+    }
   }
 }
