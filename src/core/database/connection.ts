@@ -8,7 +8,7 @@ export const AppDataSource = new DataSource({
   username: ENV.database.username,
   password: ENV.database.password,
   database: ENV.database.schema,
-  entities: [],
-  synchronize: true,
-  logging: false,
+  entities: ["dist/**/*.entity.js"],
+  synchronize: false,
+  logging: process.env.NODE_ENV === "PRODUCTION" ? false : true,
 });

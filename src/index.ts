@@ -1,7 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import ENV from "./core/config/configuration";
 import { AppDataSource } from "./core/database/connection";
-import AppRoutes from "./module/routes";
+import AppRoutes from "./modules/routes";
 
 const app: Express = express();
 const port = ENV.port || 3000;
