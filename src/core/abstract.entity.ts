@@ -27,12 +27,4 @@ export class AbstractEntity extends BaseEntity {
 
   @DeleteDateColumn({ name: "deleted_at", type: "timestamp", default: null })
   deletedAt: Date;
-
-  constructor(id: number, createdAt: Date, updatedAt: Date, deletedAt: Date) {
-    super();
-    this.id = id;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.deletedAt = deletedAt;
-  }
 }
