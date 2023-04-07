@@ -1,0 +1,11 @@
+PORT=4000
+NODE_ENV=LOCAL
+
+DB_HOST=localhost
+DB_PORT=5432
+DB_USERNAME=username
+DB_PASSWORD=password
+DB_NAME=db_name
+DATABASE_URL=postgresql://postgres:<PASSWORD>@localhost:5432/DB_NAME
+
+OPENAI_API_KEY=api_key
