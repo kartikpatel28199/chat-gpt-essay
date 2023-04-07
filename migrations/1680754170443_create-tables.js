@@ -15,6 +15,8 @@ exports.up = (pgm) => {
     name: { type: "varchar", notNull: true },
     email: { type: "varchar", notNull: true },
     is_active: { type: "boolean", default: true },
+    password: { type: "varchar", notNull: true },
+    salt: { type: "varchar", notNull: true },
     created_at: {
       type: "timestamp",
       notNull: true,
