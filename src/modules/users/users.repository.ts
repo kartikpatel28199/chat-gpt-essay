@@ -87,4 +87,18 @@ export class UserRepository {
       return null;
     }
   }
+
+  /**
+   * Get user by id
+   * @param userId
+   * @returns
+   */
+  async getUserById(userId: number): Promise<UsersEntity> {
+    const user = await this.userRepository.findOne({ where: { id: userId } });
+    if (user) {
+      delete user.password;
+      delete user.salt;
+    }
+    return user;
+  }
 }

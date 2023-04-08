@@ -1,6 +1,6 @@
 import { AppDataSource } from "../../core/database/connection";
 import HttpException from "../../core/validations/http-exception";
-import { UserRepository } from "../users/user.repository";
+import { UserRepository } from "../users/users.repository";
 import { CreateUserDto } from "./dto/register-user.dto";
 import { UsersEntity } from "../users/entities/users.entity";
 import { JwtService } from "../../core/validations/jwt.service";

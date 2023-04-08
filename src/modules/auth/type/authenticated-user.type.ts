@@ -10,3 +10,5 @@ export type JwtPayload = {
   email: string;
   name: string;
 };
+
+export type SessionDto = JwtPayload;

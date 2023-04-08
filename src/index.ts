@@ -4,7 +4,7 @@ import { validateSchema } from "./core/config/validation";
 import { AppDataSource } from "./core/database/connection";
 import AppRoutes from "./modules/routes";
 import * as bodyParser from "body-parser";
-import errorMiddleware from "./core/middlewares/error-middleware";
+import errorMiddleware from "./core/middleware/error-middleware";
 
 const app: Express = express();
 const port = ENV.port || 3000;
