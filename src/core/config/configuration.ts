@@ -11,4 +11,6 @@ export default {
     schema: process.env.DB_NAME,
   },
   openAIKey: process.env.OPENAI_API_KEY as string,
+  jwtSecretKey: process.env.JWT_SECRET_KEY,
+  jwtExpiresIn: Number(process.env.JWT_EXPIRES_IN_DAYS) * 24 * 60 * 60,
 };
