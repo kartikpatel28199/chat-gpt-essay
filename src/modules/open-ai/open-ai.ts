@@ -15,9 +15,6 @@ export const testOpenAI = async (req: Request, res: Response) => {
       messages: [{ role: "assistant", content: "What is chatgpt?" }],
     });
 
-    console.log(completion.data.id);
-    console.log(completion.data.choices);
-
     res.send({
       message: "Test successful",
       data: completion.data.choices[0].message,
