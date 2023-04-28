@@ -12,9 +12,9 @@ export class UsersEntity extends AbstractEntity {
   @Column({ type: "boolean", name: "is_active", nullable: false })
   isActive: boolean;
 
-  @Column({ type: "varchar", name: "password", nullable: false })
+  @Column({ type: "varchar", name: "password", nullable: true })
   password: string;
 
-  @Column({ type: "varchar", name: "salt", nullable: false })
+  @Column({ type: "varchar", name: "salt", nullable: true })
   salt: string;
 }

@@ -9,6 +9,7 @@ import {
   AuthenticatedUserType,
   JwtPayload,
 } from "./type/authenticated-user.type";
+import { GoogleUser } from "./type/google.type";
 
 export class AuthService {
   private userRepository: UserRepository = new UserRepository(AppDataSource);
@@ -58,6 +59,33 @@ export class AuthService {
       email: userData.email,
       name: userData.name,
       userId: userData.id,
+      accessToken,
+    };
+
+    return { data: responseData };
+  }
+
+  /**
+   * Google login callback
+   * @param googleUser
+   * @returns
+   */
+  async googleLoginCallback(googleUser: GoogleUser) {
+    if (!googleUser) {
+      return { error: new HttpException(404, "Google user not found") };
+    }
+
+    let user = await this.userRepository.getUserByEmail(googleUser.email);
+    if (!user) {
+      user = await this.userRepository.createGoogleUser(googleUser);
+    }
+
+    const { accessToken } = await this.generateAccessToken(user);
+
+    const responseData: AuthenticatedUserType = {
+      email: user.email,
+      name: user.name,
+      userId: user.id,
       accessToken,
     };
 

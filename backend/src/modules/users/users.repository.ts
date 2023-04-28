@@ -3,6 +3,7 @@ import { CreateUserDto } from "../auth/dto/register-user.dto";
 import { UsersEntity } from "./entities/users.entity";
 import * as bcrypt from "bcrypt";
 import { LoginUserDto } from "../auth/dto/login-user.dto";
+import { GoogleUser } from "../auth/type/google.type";
 
 export class UserRepository {
   private readonly userRepository: Repository<UsersEntity>;
@@ -57,13 +58,30 @@ export class UserRepository {
     const user = new UsersEntity();
     user.name = name;
     user.email = email;
-    user.name = name;
     user.salt = await bcrypt.genSalt();
     user.password = await this.hashPassword(password, user.salt);
 
     const savedUser = await this.userRepository.save(user);
     delete savedUser.salt;
     delete savedUser.password;
+
+    return savedUser;
+  }
+
+  /**
+   * Create google user
+   * @param googleUser
+   * @returns
+   */
+  async createGoogleUser(googleUser: GoogleUser): Promise<UsersEntity> {
+    const { email, displayName } = googleUser;
+
+    const user = new UsersEntity();
+    user.email = email;
+    user.name = displayName;
+    user.isActive = true;
+
+    const savedUser = await this.userRepository.save(user);
 
     return savedUser;
   }

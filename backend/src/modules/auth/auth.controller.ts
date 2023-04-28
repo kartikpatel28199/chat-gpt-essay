@@ -62,4 +62,24 @@ export class AuthController {
       .status(201)
       .json({ message: "User logged in successfully", data: result.data });
   };
+
+  /**
+   * Google login callback
+   * @param req
+   * @param res
+   * @returns
+   */
+  googleLoginCallback = async (req: Request, res: Response) => {
+    const result = await this.authService.googleLoginCallback(
+      req.session["passport"]["user"]
+    );
+    if (result.error) {
+      res.status(result.error.status).json({ message: result.error.message });
+      return;
+    }
+
+    res
+      .status(201)
+      .json({ message: "User logged in successfully", data: result.data });
+  };
 }

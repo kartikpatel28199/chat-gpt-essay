@@ -13,4 +13,7 @@ export default {
   openAIKey: process.env.OPENAI_API_KEY as string,
   jwtSecretKey: process.env.JWT_SECRET_KEY,
   jwtExpiresIn: Number(process.env.JWT_EXPIRES_IN_DAYS) * 24 * 60 * 60,
+  googleClientId: process.env.GOOGLE_CLIENT_ID,
+  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  googleRedirectUrl: process.env.GOOGLE_REDIRECT_URL,
 };

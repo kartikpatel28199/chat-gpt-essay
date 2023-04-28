@@ -15,6 +15,10 @@ const validationSchema = Joi.object({
   OPENAI_API_KEY: Joi.string().required(),
   JWT_SECRET_KEY: Joi.string().required(),
   JWT_EXPIRES_IN_DAYS: Joi.number().required(),
+
+  GOOGLE_CLIENT_ID: Joi.string().required(),
+  GOOGLE_CLIENT_SECRET: Joi.string().required(),
+  GOOGLE_REDIRECT_URL: Joi.string().required(),
 }).unknown();
 
 export const validateSchema = () => {

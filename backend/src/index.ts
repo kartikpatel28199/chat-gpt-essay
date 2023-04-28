@@ -5,6 +5,9 @@ import { AppDataSource } from "./core/database/connection";
 import AppRoutes from "./modules/routes";
 import * as bodyParser from "body-parser";
 import errorMiddleware from "./core/middleware/error-middleware";
+import passport from "passport";
+import session from "express-session";
+import { initPassport } from "./modules/auth/strategy/init";
 
 const app: Express = express();
 const port = ENV.port || 3000;
@@ -34,6 +37,16 @@ app.use(
   })
 );
 app.use(errorMiddleware);
+app.use(
+  session({
+    resave: false,
+    saveUninitialized: true,
+    secret: "SECRET",
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
+initPassport(passport);
 
 AppDataSource.initialize()
   .then(() => {
