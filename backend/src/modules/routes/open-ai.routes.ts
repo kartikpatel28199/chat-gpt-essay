@@ -5,5 +5,6 @@ const openAIRouter = Router();
 const openAIController = new OpenAIController();
 
 openAIRouter.get("/test", openAIController.testOpenAI);
+openAIRouter.post("/ask", openAIController.askQuestion);
 
 export default openAIRouter;

@@ -3,9 +3,9 @@ import { IsNotEmpty, IsString } from "class-validator";
 export class AskQuestionDto {
   @IsString()
   @IsNotEmpty()
-  message: string;
+  question: string;
 
   constructor(data: AskQuestionDto) {
-    this.message = data.message;
+    this.question = data.question;
   }
 }
