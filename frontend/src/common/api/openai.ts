@@ -6,7 +6,7 @@ const askQuestion = async (data: any) => {
     const response = await axios.post(`${API_URL}/open-ai/ask`, { ...data });
     return response;
   } catch (error) {
-    throw error;
+    return { data: { error: error } };
   }
 };
 
