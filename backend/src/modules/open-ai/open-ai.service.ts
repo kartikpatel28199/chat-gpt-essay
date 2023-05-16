@@ -26,7 +26,7 @@ export class OpenAIService {
     } catch (error) {
       console.log("error", error);
       return {
-        error: new HttpException(500, "Something went wrong"),
+        error: new HttpException(500, `Something went wrong. ${error.message}`),
       };
     }
   }
@@ -51,7 +51,7 @@ export class OpenAIService {
     } catch (error) {
       console.log("error", error);
       return {
-        error: new HttpException(500, "Something went wrong"),
+        error: new HttpException(500, `Something went wrong. ${error.message}`),
       };
     }
   }
