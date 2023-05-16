@@ -10,10 +10,6 @@ import { requestLoggerMiddleware } from "./core/interceptors/log.interceptor";
 const app: Express = express();
 const port = ENV.port || 3000;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Easy server with chat gpt");
-});
-
 validateSchema();
 
 // Body Parser
@@ -46,6 +42,9 @@ AppDataSource.initialize()
 
 app.use(requestLoggerMiddleware({ logger: console.log }));
 
+app.get("/health", (req: Request, res: Response) => {
+  res.send("Server is up and running successfully");
+});
 app.use("", AppRoutes);
 
 app.listen(port, () => {
