@@ -19,7 +19,7 @@ export class OpenAIController {
   testOpenAI = async (req: Request, res: Response) => {
     const result = await this.openAIService.testOpenAI();
     if (result.error) {
-      res.status(result.error.status).json({ message: result.error.message });
+      res.status(result.error.status).json({ error: result.error.message });
       return;
     }
 
@@ -43,7 +43,7 @@ export class OpenAIController {
 
     const result = await this.openAIService.askQuestion(questionDto);
     if (result.error) {
-      res.status(result.error.status).json({ message: result.error.message });
+      res.status(result.error.status).json({ error: result.error.message });
       return;
     }
 
