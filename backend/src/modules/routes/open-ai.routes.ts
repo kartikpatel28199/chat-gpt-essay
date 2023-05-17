@@ -1,7 +1,10 @@
-import { testOpenAI } from "../open-ai/open-ai";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const router = require("express").Router();
+import { OpenAIController } from "../open-ai/open-ai.controller";
+import { Router } from "express";
 
-router.get("/test", testOpenAI);
+const openAIRouter = Router();
+const openAIController = new OpenAIController();
 
-export default router;
+openAIRouter.get("/test", openAIController.testOpenAI);
+openAIRouter.post("/ask", openAIController.askQuestion);
+
+export default openAIRouter;

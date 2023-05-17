@@ -5,12 +5,19 @@ import { AppDataSource } from "./core/database/connection";
 import AppRoutes from "./modules/routes";
 import * as bodyParser from "body-parser";
 import errorMiddleware from "./core/middleware/error-middleware";
+import cors from "cors";
 import { requestLoggerMiddleware } from "./core/interceptors/log.interceptor";
 
 const app: Express = express();
 const port = ENV.port || 3000;
 
 validateSchema();
+
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 
 // Body Parser
 app.use(

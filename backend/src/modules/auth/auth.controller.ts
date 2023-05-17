@@ -28,7 +28,7 @@ export class AuthController {
 
     const result = await this.authService.registerUser(registerUserDto);
     if (result.error) {
-      res.status(result.error.status).json({ message: result.error.message });
+      res.status(result.error.status).json({ error: result.error.message });
       return;
     }
 
@@ -54,7 +54,7 @@ export class AuthController {
 
     const result = await this.authService.loginUser(loginDto);
     if (result.error) {
-      res.status(result.error.status).json({ message: result.error.message });
+      res.status(result.error.status).json({ error: result.error.message });
       return;
     }
 
