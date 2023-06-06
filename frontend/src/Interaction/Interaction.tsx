@@ -4,10 +4,11 @@ import { LoadingButton } from "@mui/lab";
 import "./Interaction.css";
 import api from "../common/api";
 import AlertBox from "../common/components/alertbox/alertbox";
+import TextEditor from "../common/components/text-editor/text-editor";
 
 function Interaction() {
   const [inputText, setInputText] = useState("");
-  const [questionResponse, setQuestionResponse] = useState("Chat gpt response");
+  const [questionResponse, setQuestionResponse] = useState("");
   const [isSubmitButtonLoading, setSubmitButtonLoading] = useState(false);
   const [showAlertBox, setShowAlertBox] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -61,8 +62,12 @@ function Interaction() {
           multiline
           rows={4}
           disabled
-          value={questionResponse}
+          value={questionResponse || "Chat gpt response"}
         />
+      </div>
+
+      <div className="text-editor">
+        <TextEditor value={questionResponse} onChange={questionResponse} />
       </div>
 
       <div>{showAlertBox && <AlertBox message={errorMessage} />}</div>
