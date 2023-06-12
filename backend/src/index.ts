@@ -1,10 +1,7 @@
 import ENV from "./core/config/configuration";
 import { validateSchema } from "./core/config/validation";
 import { AppDataSource } from "./core/database/connection";
-import * as bodyParser from "body-parser";
 import errorMiddleware from "./core/middleware/error-middleware";
-import cors from "cors";
-import { requestLoggerMiddleware } from "./core/interceptors/log.interceptor";
 import Fastify from "fastify";
 import CorsPlugin from "@fastify/cors";
 import openAIRouter from "./modules/routes/open-ai.routes";
@@ -20,25 +17,6 @@ const port: number = ENV.port || 3000;
 validateSchema();
 
 app.register(CorsPlugin, { origin: true });
-
-// Body Parser
-// app.use(
-//   bodyParser.urlencoded({
-//     limit: "250mb",
-//     extended: true,
-//   })
-// );
-// app.use(
-//   bodyParser.json({
-//     limit: "250mb",
-//   })
-// );
-// app.use(
-//   bodyParser.raw({
-//     type: "application/octet-stream",
-//     limit: "250mb",
-//   })
-// );
 
 AppDataSource.initialize()
   .then(() => {
