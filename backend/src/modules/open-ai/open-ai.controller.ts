@@ -1,7 +1,8 @@
+import { FastifyReply } from "fastify";
 import { validateDto } from "../../core/validations/dto-validation";
 import { AskQuestionDto } from "./dto/ask-question.dto";
 import { OpenAIService } from "./open-ai.service";
-import { Request, Response } from "express";
+import { Request } from "../../core/types/request.types";
 
 export class OpenAIController {
   private readonly openAIService = new OpenAIService();
@@ -13,42 +14,43 @@ export class OpenAIController {
   /**
    * Test OpenAI
    * @param req
-   * @param res
+   * @param reply
    * @returns
    */
-  testOpenAI = async (req: Request, res: Response) => {
+  testOpenAI = async (req: Request, reply: FastifyReply) => {
     const result = await this.openAIService.testOpenAI();
     if (result.error) {
-      res.status(result.error.status).json({ error: result.error.message });
+      reply.status(result.error.status).send({ error: result.error.message });
       return;
     }
 
-    res.status(201).json({ message: "Test successful", data: result.data });
+    reply.status(201).send({ message: "Test successful", data: result.data });
   };
 
   /**
    * Ask question
    * @param req
-   * @param res
+   * @param reply
    * @returns
    */
-  askQuestion = async (req: Request, res: Response) => {
-    const questionDto = new AskQuestionDto({ ...req.body });
+  askQuestion = async (req: Request, reply: FastifyReply) => {
+    req.body;
+    const questionDto = new AskQuestionDto({ ...(req.body as any) });
 
     const error = await validateDto(questionDto);
     if (error) {
-      res.status(400).json({ error });
+      reply.status(400).send({ error });
       return;
     }
 
     const result = await this.openAIService.askQuestion(questionDto);
     if (result.error) {
-      res.status(result.error.status).json({ error: result.error.message });
+      reply.status(result.error.status).send({ error: result.error.message });
       return;
     }
 
-    res
+    reply
       .status(200)
-      .json({ message: "Question asked successfully", data: result.data });
+      .send({ message: "Question asked successfully", data: result.data });
   };
 }

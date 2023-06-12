@@ -1,15 +1,14 @@
-import { NextFunction, Request, Response } from "express";
 import HttpException from "../validations/http-exception";
+import { FastifyReply, FastifyRequest } from "fastify";
 
 function errorMiddleware(
   error: HttpException,
-  request: Request,
-  response: Response,
-  next: NextFunction
+  request: FastifyRequest,
+  reply: FastifyReply
 ) {
   const status = error.status || 500;
   const message = error.message || "Something went wrong";
-  response.status(status).send({
+  reply.status(status).send({
     status,
     message,
   });

@@ -1,6 +1,6 @@
 import { UserService } from "./users.service";
-import { Response } from "express";
 import { Request } from "../../core/types/request.types";
+import { FastifyReply } from "fastify";
 
 export class UserController {
   private readonly userService: UserService;
@@ -12,21 +12,19 @@ export class UserController {
   /**
    * Get user information
    * @param req
-   * @param res
+   * @param reply
    * @returns
    */
-  getUserInformation = async (req: Request, res: Response) => {
+  getUserInformation = async (req: Request, reply: FastifyReply) => {
     const result = await this.userService.getUserInformation(req.user);
     if (result.error) {
-      res.status(result.error.status).json({ message: result.error.message });
+      reply.status(result.error.status).send({ message: result.error.message });
       return;
     }
 
-    res
-      .status(201)
-      .json({
-        message: "User details fetched successfully",
-        data: result.data,
-      });
+    reply.status(201).send({
+      message: "User details fetched successfully",
+      data: result.data,
+    });
   };
 }

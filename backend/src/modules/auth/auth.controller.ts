@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
 import { AuthService } from "./auth.service";
 import { CreateUserDto } from "./dto/register-user.dto";
 import { validateDto } from "../../core/validations/dto-validation";
 import { LoginUserDto } from "./dto/login-user.dto";
+import { FastifyReply } from "fastify";
+import { Request } from "../../core/types/request.types";
 
 export class AuthController {
   public authService = new AuthService();
@@ -14,52 +15,52 @@ export class AuthController {
   /**
    * Register user
    * @param req
-   * @param res
+   * @param reply
    * @returns
    */
-  registerUser = async (req: Request, res: Response) => {
-    const registerUserDto = new CreateUserDto({ ...req.body });
+  registerUser = async (req: Request, reply: FastifyReply) => {
+    const registerUserDto = new CreateUserDto({ ...(req.body as any) });
 
     const error = await validateDto(registerUserDto);
     if (error) {
-      res.status(400).json({ error });
+      reply.status(400).send({ error });
       return;
     }
 
     const result = await this.authService.registerUser(registerUserDto);
     if (result.error) {
-      res.status(result.error.status).json({ error: result.error.message });
+      reply.status(result.error.status).send({ error: result.error.message });
       return;
     }
 
-    res
+    reply
       .status(201)
-      .json({ message: "User registered successfully", data: result.data });
+      .send({ message: "User registered successfully", data: result.data });
   };
 
   /**
    * Login user
    * @param req
-   * @param res
+   * @param reply
    * @returns
    */
-  loginUser = async (req: Request, res: Response) => {
-    const loginDto = new LoginUserDto({ ...req.body });
+  loginUser = async (req: Request, reply: FastifyReply) => {
+    const loginDto = new LoginUserDto({ ...(req.body as any) });
 
     const error = await validateDto(loginDto);
     if (error) {
-      res.status(400).json({ error });
+      reply.status(400).send({ error });
       return;
     }
 
     const result = await this.authService.loginUser(loginDto);
     if (result.error) {
-      res.status(result.error.status).json({ error: result.error.message });
+      reply.status(result.error.status).send({ error: result.error.message });
       return;
     }
 
-    res
+    reply
       .status(201)
-      .json({ message: "User logged in successfully", data: result.data });
+      .send({ message: "User logged in successfully", data: result.data });
   };
 }

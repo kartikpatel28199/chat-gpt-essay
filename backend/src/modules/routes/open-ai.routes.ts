@@ -1,10 +1,9 @@
+import { FastifyInstance } from "fastify";
 import { OpenAIController } from "../open-ai/open-ai.controller";
-import { Router } from "express";
 
-const openAIRouter = Router();
 const openAIController = new OpenAIController();
 
-openAIRouter.get("/test", openAIController.testOpenAI);
-openAIRouter.post("/ask", openAIController.askQuestion);
-
-export default openAIRouter;
+export default async function openAIRouter(fastify: FastifyInstance) {
+  fastify.get("/test", openAIController.testOpenAI);
+  fastify.post("/ask", openAIController.askQuestion);
+}

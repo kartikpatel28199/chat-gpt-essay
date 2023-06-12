@@ -1,28 +1,33 @@
-import { Request, Response } from "express";
+import { FastifyReply } from "fastify";
+import { Request } from "../types/request.types";
 import { verifyToken } from "../validations/jwt.service";
 
 /**
  * Auth middleware
  * @param req
- * @param res
- * @param next
+ * @param reply
+ * @param done
  * @returns
  */
-export const authMiddleware = async (req: Request, res: Response, next) => {
+export const authMiddleware = async (
+  req: Request,
+  reply: FastifyReply,
+  done
+) => {
   const token = req.headers["authorization"]?.split(" ")[1];
   if (!token) {
-    return res.status(403).json({ message: "Invalid authentication" });
+    return reply.status(403).send({ message: "Invalid authentication" });
   }
 
   try {
     const payload = await verifyToken(token);
     if (!payload) {
-      return res.status(401).json({ message: "Invalid authentication" });
+      return reply.status(401).send({ message: "Invalid authentication" });
     }
     req["user"] = payload;
   } catch (error) {
-    return res.status(401).json({ message: "Invalid authentication" });
+    return reply.status(401).send({ message: "Invalid authentication" });
   }
 
-  next();
+  done();
 };
