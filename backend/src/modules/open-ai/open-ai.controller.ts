@@ -20,11 +20,11 @@ export class OpenAIController {
   testOpenAI = async (req: Request, reply: FastifyReply) => {
     const result = await this.openAIService.testOpenAI();
     if (result.error) {
-      reply.status(result.error.status).send({ error: result.error.message });
+      reply.code(result.error.status).send({ error: result.error.message });
       return;
     }
 
-    reply.status(201).send({ message: "Test successful", data: result.data });
+    reply.code(201).send({ message: "Test successful", data: result.data });
   };
 
   /**
@@ -39,18 +39,18 @@ export class OpenAIController {
 
     const error = await validateDto(questionDto);
     if (error) {
-      reply.status(400).send({ error });
+      reply.code(400).send({ error });
       return;
     }
 
     const result = await this.openAIService.askQuestion(questionDto);
     if (result.error) {
-      reply.status(result.error.status).send({ error: result.error.message });
+      reply.code(result.error.status).send({ error: result.error.message });
       return;
     }
 
     reply
-      .status(200)
+      .code(200)
       .send({ message: "Question asked successfully", data: result.data });
   };
 }

@@ -23,18 +23,18 @@ export class AuthController {
 
     const error = await validateDto(registerUserDto);
     if (error) {
-      reply.status(400).send({ error });
+      reply.code(400).send({ error });
       return;
     }
 
     const result = await this.authService.registerUser(registerUserDto);
     if (result.error) {
-      reply.status(result.error.status).send({ error: result.error.message });
+      reply.code(result.error.status).send({ error: result.error.message });
       return;
     }
 
     reply
-      .status(201)
+      .code(201)
       .send({ message: "User registered successfully", data: result.data });
   };
 
@@ -49,18 +49,18 @@ export class AuthController {
 
     const error = await validateDto(loginDto);
     if (error) {
-      reply.status(400).send({ error });
+      reply.code(400).send({ error });
       return;
     }
 
     const result = await this.authService.loginUser(loginDto);
     if (result.error) {
-      reply.status(result.error.status).send({ error: result.error.message });
+      reply.code(result.error.status).send({ error: result.error.message });
       return;
     }
 
     reply
-      .status(201)
+      .code(201)
       .send({ message: "User logged in successfully", data: result.data });
   };
 }

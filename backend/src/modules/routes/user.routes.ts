@@ -6,7 +6,7 @@ const userController = new UserController();
 
 export default async function userRouter(fastify: FastifyInstance) {
   fastify.get(
-    "",
+    "/",
     { preHandler: [authMiddleware] },
     userController.getUserInformation
   );

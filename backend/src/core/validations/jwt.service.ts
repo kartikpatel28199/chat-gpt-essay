@@ -23,6 +23,5 @@ export class JwtService {
  */
 export const verifyToken = async (token: string): Promise<JwtPayload> => {
   const payload = (await jwt.verify(token, ENV.jwtSecretKey)) as JwtPayload;
-  console.log("payload", payload);
   return payload;
 };

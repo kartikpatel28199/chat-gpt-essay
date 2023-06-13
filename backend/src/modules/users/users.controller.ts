@@ -18,11 +18,11 @@ export class UserController {
   getUserInformation = async (req: Request, reply: FastifyReply) => {
     const result = await this.userService.getUserInformation(req.user);
     if (result.error) {
-      reply.status(result.error.status).send({ message: result.error.message });
+      reply.code(result.error.status).send({ message: result.error.message });
       return;
     }
 
-    reply.status(201).send({
+    reply.code(201).send({
       message: "User details fetched successfully",
       data: result.data,
     });
