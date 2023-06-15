@@ -1,4 +1,4 @@
-import { Request as ExpressRequest } from "express";
+import { FastifyRequest } from "fastify";
 import { SessionDto } from "../../modules/auth/type/authenticated-user.type";
 
-export type Request = ExpressRequest & { user: SessionDto };
+export type Request = FastifyRequest & { user: SessionDto };

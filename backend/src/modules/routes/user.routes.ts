@@ -1,10 +1,13 @@
-import { Router } from "express";
+import { FastifyInstance } from "fastify";
 import { authMiddleware } from "../../core/middleware/auth.middleware";
 import { UserController } from "../users/users.controller";
 
-const userRouter = Router();
 const userController = new UserController();
 
-userRouter.get("", authMiddleware, userController.getUserInformation);
-
-export default userRouter;
+export default async function userRouter(fastify: FastifyInstance) {
+  fastify.get(
+    "/",
+    { preHandler: [authMiddleware] },
+    userController.getUserInformation
+  );
+}

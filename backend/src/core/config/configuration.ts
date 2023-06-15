@@ -2,7 +2,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export default {
-  port: process.env.PORT,
+  port: process.env.PORT as unknown as number,
   database: {
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT as string),
