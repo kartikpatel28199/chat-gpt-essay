@@ -29,7 +29,7 @@ const MenuBar = ({ editor }: Props) => {
   }
 
   return (
-    <>
+    <div className="menu-bar">
       <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -58,12 +58,7 @@ const MenuBar = ({ editor }: Props) => {
       >
         <Code size={20} />
       </button>
-      <button
-        onClick={() => editor.chain().focus().setParagraph().run()}
-        className={editor.isActive("paragraph") ? "is-active" : ""}
-      >
-        <Paragraph size={20} />
-      </button>
+      <div className="vertical-divider"></div>
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
@@ -82,6 +77,13 @@ const MenuBar = ({ editor }: Props) => {
       >
         <TypeH3 size={20} />
       </button>
+      <button
+        onClick={() => editor.chain().focus().setParagraph().run()}
+        className={editor.isActive("paragraph") ? "is-active" : ""}
+      >
+        <Paragraph size={20} />
+      </button>
+      <div className="vertical-divider"></div>
       <button
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         className={editor.isActive("bulletList") ? "is-active" : ""}
@@ -107,31 +109,46 @@ const MenuBar = ({ editor }: Props) => {
         <BlockquoteLeft size={20} />
       </button>
 
-      <button
-        onClick={() => editor.chain().focus().undo().run()}
-        disabled={!editor.can().chain().focus().undo().run()}
-      >
-        <Undo size={20} />
-      </button>
-      <button
-        onClick={() => editor.chain().focus().redo().run()}
-        disabled={!editor.can().chain().focus().redo().run()}
-      >
-        <Redo size={20} />
-      </button>
-    </>
+      <div className="vertical-divider"></div>
+      <div>
+        <button
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().chain().focus().undo().run()}
+        >
+          <Undo size={20} />
+        </button>
+        <button
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().chain().focus().redo().run()}
+        >
+          <Redo size={20} />
+        </button>
+      </div>
+    </div>
   );
 };
 
 const Tiptap = () => {
   const editor = useEditor({
-    extensions: [Color, TextStyle, StarterKit],
+    extensions: [
+      Color.configure({ types: [TextStyle.name, ListItem.name] }),
+      TextStyle,
+      StarterKit,
+    ],
+    onFocus: () => {},
   });
 
   return (
     <div className="text-editor">
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
+      <div className="editor-content">
+        <EditorContent
+          editor={editor}
+          className="ProseMirror"
+          autoFocus={false}
+          capture={false}
+        />
+      </div>
     </div>
   );
 };
