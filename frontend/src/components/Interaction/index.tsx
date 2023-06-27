@@ -2,10 +2,10 @@ import { useState } from "react";
 import { FormControl, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import "./Interaction.css";
-import api from "../common/api";
-import AlertBox from "../common/components/alertbox/alertbox";
+import api from "../../common/api";
+import AlertBox from "../../common/components/alertbox/alertbox";
 
-function Interaction() {
+const Interaction = () => {
   const [inputText, setInputText] = useState("");
   const [questionResponse, setQuestionResponse] = useState("Chat gpt response");
   const [isSubmitButtonLoading, setSubmitButtonLoading] = useState(false);
@@ -68,6 +68,6 @@ function Interaction() {
       <div>{showAlertBox && <AlertBox message={errorMessage} />}</div>
     </>
   );
-}
+};
 
 export default Interaction;
