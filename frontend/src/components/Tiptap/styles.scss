@@ -72,34 +72,3 @@
     padding: 0.5rem 0.5rem;
   }
 }
-
-.menu-bar {
-  margin-bottom: 5px;
-  display: flex;
-  align-items: center;
-  border-bottom: 2px solid black;
-
-  button {
-    font-size: 18px;
-    margin: 2px;
-    margin-top: 7px;
-    margin-bottom: 7px;
-    outline: none;
-    border: none;
-    background: none;
-    cursor: pointer;
-  }
-
-  .is-active {
-    background-color: rgb(164, 158, 158);
-    padding: 2px 3px;
-    border-radius: 4px;
-  }
-
-  .vertical-divider {
-    margin-left: 15px;
-    margin-top: 1px;
-    border-left: 2px solid black;
-    height: 26px;
-  }
-}
