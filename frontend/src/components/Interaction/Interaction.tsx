@@ -2,8 +2,8 @@ import { useState } from "react";
 import { FormControl, TextField } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
 import "./Interaction.css";
-import api from "../common/api";
-import AlertBox from "../common/components/alertbox/alertbox";
+import api from "../../common/api";
+import AlertBox from "../../common/components/alertbox/alertbox";
 
 function Interaction() {
   const [inputText, setInputText] = useState("");

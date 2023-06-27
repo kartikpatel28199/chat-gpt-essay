@@ -1,8 +1,8 @@
 import React from "react";
 import "./App.css";
-import Interaction from "./Interaction/Interaction";
+import Interaction from "./components/Interaction/Interaction";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Tiptap from "./Tiptap/Tiptap";
+import Tiptap from "./components/Tiptap/Tiptap";
 
 function App() {
   return (
