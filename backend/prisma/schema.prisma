@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Conversations {
+  id         Int        @id @default(autoincrement())
+  is_active  Boolean?   @default(true)
+  user_id    Int
+  start_date DateTime   @default(now()) @db.Timestamp(6)
+  end_date   DateTime?  @db.Timestamp(6)
+  created_at DateTime   @default(now()) @db.Timestamp(6)
+  updated_at DateTime   @default(now()) @db.Timestamp(6)
+  deleted_at DateTime?  @db.Timestamp(6)
+  users      Users      @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "user_id")
+  messages   Messages[]
+	@@map("conversations")
+}
+
+model Messages {
+  id              Int               @id @default(autoincrement())
+  conversation_id Int
+  direction       String?           @db.VarChar
+  message         String?
+  is_sent         Boolean?          @default(false)
+  is_viewed       Boolean?          @default(false)
+  viewed_at       DateTime?         @db.Timestamp(6)
+  created_at      DateTime          @default(now()) @db.Timestamp(6)
+  updated_at      DateTime          @default(now()) @db.Timestamp(6)
+  deleted_at      DateTime?         @db.Timestamp(6)
+  conversations   Conversations     @relation(fields: [conversation_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "conversation_id")
+  messages_medias MessagesMedias[]
+	@@map("messages")
+}
+
+model MessagesMedias {
+  id         Int      @id @default(autoincrement())
+  message_id Int
+  media_path String?  @db.VarChar
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  messages   Messages @relation(fields: [message_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "message_id")
+	@@map("messages_medias")
+}
+
+model pgmigrations {
+  id     Int      @id @default(autoincrement())
+  name   String   @db.VarChar(255)
+  run_on DateTime @db.Timestamp(6)
+}
+
+model Users {
+  id            Int             @id @default(autoincrement())
+  name          String          @db.VarChar
+  email         String          @db.VarChar
+  is_active     Boolean?        @default(true)
+  password      String          @db.VarChar
+  salt          String          @db.VarChar
+  created_at    DateTime        @default(now()) @db.Timestamp(6)
+  updated_at    DateTime        @default(now()) @db.Timestamp(6)
+  deleted_at    DateTime?       @db.Timestamp(6)
+  conversations Conversations[]
+	@@map("users")
+}
