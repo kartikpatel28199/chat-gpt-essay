@@ -1,16 +1,10 @@
-import { DataSource, Repository } from "typeorm";
 import { CreateUserDto } from "../auth/dto/register-user.dto";
-import { UsersEntity } from "./entities/users.entity";
 import * as bcrypt from "bcrypt";
 import { LoginUserDto } from "../auth/dto/login-user.dto";
+import { prisma } from "../../prisma";
+import { Prisma, Users } from "@prisma/client";
 
 export class UserRepository {
-  private readonly userRepository: Repository<UsersEntity>;
-
-  constructor(private dataSource: DataSource) {
-    this.userRepository = this.dataSource.getRepository(UsersEntity);
-  }
-
   /**
    * Hash password
    * @param password
@@ -43,7 +37,7 @@ export class UserRepository {
    * @returns
    */
   async getUserByEmail(email: string) {
-    return this.userRepository.findOne({ where: { email: email } });
+    return prisma.users.findFirst({ where: { email } });
   }
 
   /**
@@ -51,17 +45,18 @@ export class UserRepository {
    * @param createUserDto
    * @returns
    */
-  async createUser(createUserDto: CreateUserDto): Promise<UsersEntity> {
+  async createUser(createUserDto: CreateUserDto): Promise<Users> {
     const { email, name, password } = createUserDto;
 
-    const user = new UsersEntity();
-    user.name = name;
-    user.email = email;
-    user.name = name;
-    user.salt = await bcrypt.genSalt();
-    user.password = await this.hashPassword(password, user.salt);
+    const salt = await bcrypt.genSalt();
+    const user: Prisma.UsersCreateInput = {
+      email,
+      name,
+      salt,
+      password: await this.hashPassword(password, salt),
+    };
 
-    const savedUser = await this.userRepository.save(user);
+    const savedUser = await prisma.users.create({ data: { ...user } });
     delete savedUser.salt;
     delete savedUser.password;
 
@@ -73,9 +68,9 @@ export class UserRepository {
    * @param loginDTO
    * @returns
    */
-  async validateUserPassword(loginDTO: LoginUserDto): Promise<UsersEntity> {
+  async validateUserPassword(loginDTO: LoginUserDto): Promise<Users> {
     const { email, password } = loginDTO;
-    const user = await this.userRepository.findOne({ where: { email: email } });
+    const user = await prisma.users.findFirst({ where: { email: email } });
     if (
       user &&
       user.salt &&
@@ -93,8 +88,8 @@ export class UserRepository {
    * @param userId
    * @returns
    */
-  async getUserById(userId: number): Promise<UsersEntity> {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+  async getUserById(userId: number): Promise<Users> {
+    const user = await prisma.users.findUnique({ where: { id: userId } });
     if (user) {
       delete user.password;
       delete user.salt;
