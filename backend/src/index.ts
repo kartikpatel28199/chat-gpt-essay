@@ -1,6 +1,5 @@
 import ENV from "./core/config/configuration";
 import { validateSchema } from "./core/config/validation";
-import { AppDataSource } from "./core/database/connection";
 import errorMiddleware from "./core/middleware/error-middleware";
 import Fastify from "fastify";
 import CorsPlugin from "@fastify/cors";
@@ -17,14 +16,6 @@ const port: number = ENV.port || 3000;
 validateSchema();
 
 app.register(CorsPlugin, { origin: true });
-
-AppDataSource.initialize()
-  .then(() => {
-    console.log("Database Data Source has been initialized!");
-  })
-  .catch((err) => {
-    console.error("Error during Data Source initialization", err);
-  });
 
 app.register(authRouter, { prefix: "auth" });
 app.register(openAIRouter, { prefix: "open-ai" });

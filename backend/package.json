@@ -29,8 +29,7 @@
     "jsonwebtoken": "^9.0.0",
     "node-pg-migrate": "^6.2.2",
     "openai": "^3.2.1",
-    "pg": "^8.10.0",
-    "typeorm": "^0.3.12"
+    "pg": "^8.10.0"
   },
   "devDependencies": {
     "@types/node": "^18.15.11",
