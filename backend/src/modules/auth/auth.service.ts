@@ -1,17 +1,16 @@
-import { AppDataSource } from "../../core/database/connection";
 import HttpException from "../../core/validations/http-exception";
 import { UserRepository } from "../users/users.repository";
 import { CreateUserDto } from "./dto/register-user.dto";
-import { UsersEntity } from "../users/entities/users.entity";
 import { JwtService } from "../../core/validations/jwt.service";
 import { LoginUserDto } from "./dto/login-user.dto";
 import {
   AuthenticatedUserType,
   JwtPayload,
 } from "./type/authenticated-user.type";
+import { Users } from "@prisma/client";
 
 export class AuthService {
-  private userRepository: UserRepository = new UserRepository(AppDataSource);
+  private userRepository: UserRepository = new UserRepository();
   private jwtService = new JwtService();
 
   /**
@@ -21,7 +20,7 @@ export class AuthService {
    */
   async registerUser(
     createUserDto: CreateUserDto
-  ): Promise<{ error?: HttpException; data?: UsersEntity }> {
+  ): Promise<{ error?: HttpException; data?: Users }> {
     const user = await this.userRepository.getUserByEmail(createUserDto.email);
     if (user) {
       return { error: new HttpException(409, "User already exist") };
@@ -69,7 +68,7 @@ export class AuthService {
    * @param user
    * @returns
    */
-  private async generateAccessToken(user: UsersEntity) {
+  private async generateAccessToken(user: Users) {
     const payload: JwtPayload = {
       userId: user.id,
       email: user.email,
