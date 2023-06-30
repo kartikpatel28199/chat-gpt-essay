@@ -7,7 +7,6 @@ import openAIRouter from "./modules/routes/open-ai.routes";
 import userRouter from "./modules/routes/user.routes";
 import authRouter from "./modules/routes/auth.routes";
 import { prisma } from "./prisma";
-import swag from "@fastify/swagger-ui";
 
 const app = Fastify({
   logger: true,
@@ -38,27 +37,29 @@ app.register(import("@fastify/swagger"), {
   },
 });
 
-app.register(import("@fastify/swagger-ui"), {
-  routePrefix: "/doc",
-  uiConfig: {
-    docExpansion: "list",
-    deepLinking: false,
-  },
-  uiHooks: {
-    onRequest: function (request, reply, next) {
-      next();
+if (ENV.nodeEnv !== "PRODUCTION") {
+  app.register(import("@fastify/swagger-ui"), {
+    routePrefix: "/doc",
+    uiConfig: {
+      docExpansion: "list",
+      deepLinking: false,
     },
-    preHandler: function (request, reply, next) {
-      next();
+    uiHooks: {
+      onRequest: function (request, reply, next) {
+        next();
+      },
+      preHandler: function (request, reply, next) {
+        next();
+      },
     },
-  },
-  staticCSP: true,
-  transformStaticCSP: (header) => header,
-  transformSpecification: (swaggerObject, request, reply) => {
-    return swaggerObject;
-  },
-  transformSpecificationClone: true,
-});
+    staticCSP: true,
+    transformStaticCSP: (header) => header,
+    transformSpecification: (swaggerObject, request, reply) => {
+      return swaggerObject;
+    },
+    transformSpecificationClone: true,
+  });
+}
 
 app.register(CorsPlugin, { origin: true });
 app.register(authRouter, { prefix: "auth" });
