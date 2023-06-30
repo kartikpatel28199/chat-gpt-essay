@@ -7,6 +7,7 @@ import openAIRouter from "./modules/routes/open-ai.routes";
 import userRouter from "./modules/routes/user.routes";
 import authRouter from "./modules/routes/auth.routes";
 import { prisma } from "./prisma";
+import swag from "@fastify/swagger-ui";
 
 const app = Fastify({
   logger: true,
@@ -15,6 +16,49 @@ const app = Fastify({
 const port: number = ENV.port || 3000;
 
 validateSchema();
+
+app.register(import("@fastify/swagger"), {
+  mode: "dynamic",
+  openapi: {
+    openapi: "3.0.3",
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    info: {
+      title: "Assignment Ace API",
+      description: "Assignment Ace API Swagger",
+      version: "1.0",
+    },
+  },
+});
+
+app.register(import("@fastify/swagger-ui"), {
+  routePrefix: "/doc",
+  uiConfig: {
+    docExpansion: "list",
+    deepLinking: false,
+  },
+  uiHooks: {
+    onRequest: function (request, reply, next) {
+      next();
+    },
+    preHandler: function (request, reply, next) {
+      next();
+    },
+  },
+  staticCSP: true,
+  transformStaticCSP: (header) => header,
+  transformSpecification: (swaggerObject, request, reply) => {
+    return swaggerObject;
+  },
+  transformSpecificationClone: true,
+});
 
 app.register(CorsPlugin, { origin: true });
 app.register(authRouter, { prefix: "auth" });
@@ -28,7 +72,7 @@ app.get("/health", (req, reply) => {
 
 const start = async () => {
   await prisma.$connect();
-  app.listen({ port: port }, async (err, address) => {
+  await app.listen({ port: port }, async (err, address) => {
     if (err) {
       app.log.error(err);
       process.exit(1);
