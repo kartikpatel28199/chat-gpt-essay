@@ -7,7 +7,18 @@ const userController = new UserController();
 export default async function userRouter(fastify: FastifyInstance) {
   fastify.get(
     "/",
-    { preHandler: [authMiddleware] },
+    {
+      preHandler: [authMiddleware],
+      schema: {
+        summary: "Get user information",
+        tags: ["Users"],
+        security: [
+          {
+            bearerAuth: [],
+          },
+        ],
+      },
+    },
     userController.getUserInformation
   );
 }
