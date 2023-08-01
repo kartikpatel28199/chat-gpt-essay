@@ -7,6 +7,7 @@ import openAIRouter from "./modules/routes/open-ai.routes";
 import userRouter from "./modules/routes/user.routes";
 import authRouter from "./modules/routes/auth.routes";
 import { prisma } from "./prisma";
+import editorContentRouter from "./modules/routes/editor-content.routes";
 
 const app = Fastify({
   logger: true,
@@ -65,6 +66,7 @@ app.register(CorsPlugin, { origin: true });
 app.register(authRouter, { prefix: "auth" });
 app.register(openAIRouter, { prefix: "open-ai" });
 app.register(userRouter, { prefix: "user" });
+app.register(editorContentRouter, { prefix: "editor-content" });
 app.setErrorHandler(errorMiddleware);
 
 app.get("/health", (req, reply) => {

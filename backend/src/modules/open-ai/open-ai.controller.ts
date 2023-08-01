@@ -34,7 +34,6 @@ export class OpenAIController {
    * @returns
    */
   askQuestion = async (req: Request, reply: FastifyReply) => {
-    req.body;
     const questionDto = new AskQuestionDto({ ...(req.body as any) });
 
     const error = await validateDto(questionDto);
