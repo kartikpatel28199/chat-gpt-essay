@@ -3,6 +3,7 @@ import { validateDto } from "../../core/validations/dto-validation";
 import { AskQuestionDto } from "./dto/ask-question.dto";
 import { OpenAIService } from "./open-ai.service";
 import { Request } from "../../core/types/request.types";
+import { SocketStream } from "@fastify/websocket";
 
 export class OpenAIController {
   private readonly openAIService = new OpenAIService();
@@ -51,5 +52,25 @@ export class OpenAIController {
     reply
       .code(200)
       .send({ message: "Question asked successfully", data: result.data });
+  };
+
+  /**
+   * Ask question from web websocket
+   * @param question
+   * @returns
+   */
+  askQuestionFromWebSocket = async (connection: SocketStream, req: Request) => {
+    connection.socket.on("message", async (message) => {
+      const question = message.toString();
+      if (!question || question === "") {
+        return { data: "" };
+      }
+
+      const result = await this.openAIService.askQuestionFromWebSocket(
+        question
+      );
+
+      connection.socket.send(JSON.stringify(result));
+    });
   };
 }

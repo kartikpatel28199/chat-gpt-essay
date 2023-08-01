@@ -38,4 +38,27 @@ export class ChatGPT {
       };
     }
   }
+
+  /**
+   * Create chat completion from web socket
+   * @param content
+   * @returns
+   */
+  async createChatCompletionFromWebSocket(
+    content: string
+  ): Promise<{ error?: string; data?: string }> {
+    try {
+      const completion = await this.openAI.createChatCompletion({
+        model: this.gptTurboModel,
+        messages: [{ role: this.gptAssistantRole, content }],
+      });
+
+      return {
+        data: completion.data.choices[0].message.content,
+      };
+    } catch (error) {
+      console.log("error", error);
+      return { error: "Something went wrong" };
+    }
+  }
 }

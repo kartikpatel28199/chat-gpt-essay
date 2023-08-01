@@ -23,4 +23,13 @@ export class OpenAIService {
   ): Promise<{ error?: HttpException; data?: string }> {
     return this.chatGPT.createChatCompletion(askQuestionDto.question);
   }
+
+  /**
+   * Ask question from web socket
+   * @param question
+   * @returns
+   */
+  async askQuestionFromWebSocket(question: string) {
+    return this.chatGPT.createChatCompletionFromWebSocket(question);
+  }
 }

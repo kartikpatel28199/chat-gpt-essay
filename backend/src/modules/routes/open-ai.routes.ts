@@ -31,4 +31,12 @@ export default async function openAIRouter(fastify: FastifyInstance) {
     },
     openAIController.askQuestion
   );
+
+  fastify.get(
+    "/ask-ws",
+    {
+      websocket: true,
+    },
+    openAIController.askQuestionFromWebSocket
+  );
 }

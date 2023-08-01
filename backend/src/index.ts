@@ -8,6 +8,7 @@ import userRouter from "./modules/routes/user.routes";
 import authRouter from "./modules/routes/auth.routes";
 import { prisma } from "./prisma";
 import editorContentRouter from "./modules/routes/editor-content.routes";
+import FastifyWebsocket from "@fastify/websocket";
 
 const app = Fastify({
   logger: true,
@@ -37,6 +38,8 @@ app.register(import("@fastify/swagger"), {
     },
   },
 });
+
+app.register(FastifyWebsocket);
 
 if (ENV.nodeEnv !== "PRODUCTION") {
   app.register(import("@fastify/swagger-ui"), {
@@ -75,6 +78,7 @@ app.get("/health", (req, reply) => {
 
 const start = async () => {
   await prisma.$connect();
+  await app.ready();
   await app.listen({ port: port }, async (err, address) => {
     if (err) {
       app.log.error(err);
