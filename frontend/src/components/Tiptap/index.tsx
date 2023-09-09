@@ -24,26 +24,6 @@ const Tiptap = () => {
   const [editorContent, setEditorContent] = useState("");
   const [editorContentId, setEditorContentId] = useState<number>();
 
-  useEffect(() => {
-    if (localStorage.getItem("editorContentId")) {
-      const editorId = localStorage.getItem(
-        "editorContentId"
-      ) as unknown as number;
-      getEditor(editorId);
-    }
-  }, [editorContentId]);
-
-  async function getEditor(editorId: number) {
-    const response = await api.editorContent.getEditorContent(
-      editorId as number
-    );
-    if (!response.data.error) {
-      setEditorContent(response.data.content);
-      setEditorContentId(response.data.id);
-      editor?.commands.setContent(editorContent);
-    }
-  }
-
   const saveEditorContent = async () => {
     const data = { content: editorContent, id: editorContentId };
     const response = await api.editorContent.saveEditorContent(data);
@@ -76,6 +56,29 @@ const Tiptap = () => {
       saveEditorContent();
     },
   });
+
+  useEffect(() => {
+    if (localStorage.getItem("editorContentId")) {
+      const editorId = localStorage.getItem(
+        "editorContentId"
+      ) as unknown as number;
+      (async () => {
+        await getEditor(editorId);
+      })();
+    }
+  }, [editorContentId]);
+
+  async function getEditor(editorId: number) {
+    const response = await api.editorContent.getEditorContent(
+      editorId as number
+    );
+
+    if (!response.data.error) {
+      setEditorContent(editorContent + response.data.content);
+      setEditorContentId(response.data.id);
+      editor?.commands.setContent(editorContent);
+    }
+  }
 
   if (localStorage.getItem("editorContentId") && !editorContentId) {
     return <>Still loading...</>;
