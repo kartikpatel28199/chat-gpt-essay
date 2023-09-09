@@ -7,6 +7,18 @@ import StarterKit from "@tiptap/starter-kit";
 import MenuBar from "./components/Menubar";
 import { useEffect, useState } from "react";
 import api from "../../common/api";
+import Collaboration from "@tiptap/extension-collaboration";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
+import * as Y from "yjs";
+import { HocuspocusProvider } from "@hocuspocus/provider";
+
+const ydoc = new Y.Doc();
+
+const provider = new HocuspocusProvider({
+  url: "ws://localhost:4001",
+  name: "example-document",
+  document: ydoc,
+});
 
 const Tiptap = () => {
   const [editorContent, setEditorContent] = useState("");
@@ -49,6 +61,12 @@ const Tiptap = () => {
       Color.configure({ types: [TextStyle.name, ListItem.name] }),
       TextStyle,
       StarterKit,
+      Collaboration.configure({
+        document: ydoc,
+      }),
+      CollaborationCursor.configure({
+        provider,
+      }),
     ],
     onFocus: () => {},
     onUpdate: ({ editor }) => {

@@ -9,13 +9,14 @@ import authRouter from "./modules/routes/auth.routes";
 import { prisma } from "./prisma";
 import editorContentRouter from "./modules/routes/editor-content.routes";
 import FastifyWebsocket from "@fastify/websocket";
+import { Server } from "@hocuspocus/server";
 
 const app = Fastify({
   logger: true,
 });
 
 const port: number = ENV.port || 3000;
-
+const hocusPocusServer = Server.configure({ port: 4001, address: "localhost" });
 validateSchema();
 
 app.register(import("@fastify/swagger"), {
@@ -88,4 +89,5 @@ const start = async () => {
   });
 };
 
+hocusPocusServer.listen();
 start();

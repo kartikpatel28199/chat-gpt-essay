@@ -21,6 +21,7 @@
     "@fastify/swagger": "^8.6.0",
     "@fastify/swagger-ui": "^1.9.0",
     "@fastify/websocket": "^8.2.0",
+    "@hocuspocus/server": "^2.3.1",
     "@prisma/client": "^4.16.1",
     "@types/bcrypt": "^5.0.0",
     "@types/jsonwebtoken": "^9.0.1",
