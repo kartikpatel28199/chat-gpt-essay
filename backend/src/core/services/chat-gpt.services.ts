@@ -23,9 +23,15 @@ export class ChatGPT {
     content: string
   ): Promise<{ error?: HttpException; data?: string }> {
     try {
+      const prepend = "Answer should be formatted in HTML tags. ";
       const completion = await this.openAI.createChatCompletion({
         model: this.gptTurboModel,
-        messages: [{ role: this.gptAssistantRole, content }],
+        messages: [
+          {
+            role: this.gptAssistantRole,
+            content: prepend + content,
+          },
+        ],
       });
 
       return {
