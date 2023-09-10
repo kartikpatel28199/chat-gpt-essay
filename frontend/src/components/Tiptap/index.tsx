@@ -11,6 +11,8 @@ import Collaboration from "@tiptap/extension-collaboration";
 import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import * as Y from "yjs";
 import { HocuspocusProvider } from "@hocuspocus/provider";
+import { LoadingButton } from "@mui/lab";
+import AlertBox from "../../common/components/alertbox/alertbox";
 
 const ydoc = new Y.Doc();
 
@@ -23,6 +25,9 @@ const provider = new HocuspocusProvider({
 const Tiptap = () => {
   const [editorContent, setEditorContent] = useState("");
   const [editorContentId, setEditorContentId] = useState<number>();
+  const [isSubmitButtonLoading, setSubmitButtonLoading] = useState(false);
+  const [showAlertBox, setShowAlertBox] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const saveEditorContent = async () => {
     const data = { content: editorContent, id: editorContentId };
@@ -33,6 +38,27 @@ const Tiptap = () => {
       if (!localStorage.getItem("editorContentId")) {
         localStorage.setItem("editorContentId", editorContentId);
       }
+    }
+  };
+
+  const handleAskQuestion = async (question: string) => {
+    console.log("question", question);
+
+    const data = { question };
+    const response = await api.openAI.askQuestion(data);
+    console.log("response", response);
+
+    setSubmitButtonLoading(false);
+    if (response.data.error) {
+      setErrorMessage(response.data.error.message);
+      setShowAlertBox(true);
+      setTimeout(() => {
+        setShowAlertBox(false);
+        setErrorMessage("");
+      }, 3000);
+    } else {
+      const temp = `\n${response.data.data}`;
+      editor?.commands.insertContent(temp);
     }
   };
 
@@ -85,16 +111,30 @@ const Tiptap = () => {
   }
 
   return (
-    <div className="text-editor">
-      <MenuBar editor={editor} />
-      <div className="editor-content">
+    <div>
+      <div className="text-editor">
+        <MenuBar editor={editor} />
         <EditorContent
+          className="editor-content"
           editor={editor}
-          className="ProseMirror"
           autoFocus={false}
           capture={false}
         />
       </div>
+      <LoadingButton
+        variant="contained"
+        size="large"
+        color="inherit"
+        loading={isSubmitButtonLoading}
+        onClick={() => {
+          setSubmitButtonLoading(true);
+          handleAskQuestion(editor?.getText() as string);
+        }}
+      >
+        Ask Chat GPT
+      </LoadingButton>
+
+      <div>{showAlertBox && <AlertBox message={errorMessage} />}</div>
     </div>
   );
 };

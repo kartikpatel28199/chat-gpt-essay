@@ -4,6 +4,7 @@
   position: absolute;
   word-wrap: break-word;
   white-space: break-spaces;
+  height: 100%;
 
   ul,
   ol {
@@ -68,8 +69,8 @@
   text-align: left;
 
   .editor-content {
+    height: 83%;
     flex: 1 1 auto;
-    overflow-x: hidden;
     overflow-y: auto;
     padding: 0.5rem 0.5rem;
   }
