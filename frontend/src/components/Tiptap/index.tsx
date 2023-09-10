@@ -42,13 +42,10 @@ const Tiptap = () => {
   };
 
   const handleAskQuestion = async (question: string) => {
-    console.log("question", question);
-
     const data = { question };
     const response = await api.openAI.askQuestion(data);
-    console.log("response", response);
-
     setSubmitButtonLoading(false);
+    editor?.setEditable(true);
     if (response.data.error) {
       setErrorMessage(response.data.error.message);
       setShowAlertBox(true);
@@ -128,6 +125,7 @@ const Tiptap = () => {
         loading={isSubmitButtonLoading}
         onClick={() => {
           setSubmitButtonLoading(true);
+          editor?.setEditable(false);
           handleAskQuestion(editor?.getText() as string);
         }}
       >
